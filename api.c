@@ -70,3 +70,25 @@ int getPathFile(int i,char **argv,char *path_file){
     }
     return 0;
 }
+
+
+int getFileName(char *path_file,char *file_name){
+    int nBarras = 0;
+    for(int i = 0; i < strlen(path_file); i++){
+        if(path_file[i] == '/'){
+            nBarras++;
+        }
+    }
+    int nBarrasAtual = 0;
+    int aux = 0;
+    for(int i = 0; i < strlen(path_file); i++){
+        if(nBarrasAtual == nBarras){
+            file_name[aux] = path_file[i];
+            aux++;
+        }
+        else if(path_file[i] == '/'){
+            nBarrasAtual++;
+        }
+    }
+    return 0;
+}

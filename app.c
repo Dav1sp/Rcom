@@ -67,11 +67,14 @@ int main(int argc, char** argv){
     
     getPathFile(strlen(protocol)+4+strlen(name)+1+strlen(password)+2+strlen(host)+1,argv,path_file);
 
+    getFileName(path_file,file_name);
+
     printf("Protocol: %s\n", protocol);
     printf("Name: %s\n", name);
     printf("Password: %s\n", password);
     printf("Host: %s\n", host);
     printf("PathFile: %s\n", path_file);
+    printf("FileName: %s\n", file_name);
 
     struct hostent *h;
 

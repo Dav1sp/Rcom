@@ -20,3 +20,4 @@ int getUser(int i,char **argv,char *name);
 int getPassword(int i,char **argv,char *password);
 int getHost(int i,char **argv,char *host);
 int getPathFile(int i,char **argv,char *path_file);
+int getFileName(char *path_file,char *file_name);
