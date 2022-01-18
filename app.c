@@ -19,6 +19,12 @@ int main(int argc, char** argv){
 
     char name[SIZE];
     memset(name, 0, SIZE);
+	
+    char path_file[SIZE];
+    memset(path_file, 0, SIZE);
+	
+    char file_name[SIZE];
+    memset(file_name, 0, SIZE);
 
     char password[SIZE];
     memset(password, 0, SIZE);
@@ -26,11 +32,7 @@ int main(int argc, char** argv){
     char host[SIZE];
     memset(host, 0, SIZE);
 
-    char path_file[SIZE];
-    memset(path_file, 0, SIZE);
 
-    char file_name[SIZE];
-    memset(file_name, 0, SIZE);
 
     //break up url
 
