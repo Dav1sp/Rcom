@@ -155,23 +155,37 @@ int main(int argc, char** argv){
                     perror("connect()");
                     exit(0);
             }
-            printf("> Sending retrieve\n");
 	        dprintf(sockfd, "retr %s\r\n", path_file);//printf para um filedescriptor(antigo)
-            create_file(sockfd_file_transfer, file_name);
+            read(sockfd, response3, SIZE);
+            if(strncmp(response3, "550", 3)==0){
+                printf("> Failed to open file\n");
+                return -1;
+            }
+            else if(strncmp(response3, "150", 3)==0){
+                printf("> Sending retrieve\n");
+                create_file(sockfd_file_transfer, file_name);
+            }
+            else{
+                printf("> Error occured open the file \n");
+                return -1;
+            }
             
         }
-        else if(strncmp(response2, "430", 3) == 0){
-            printf("> Invalid credentials \n");
+        else if(strncmp(response2, "530 Login incorrect",19) == 0){
+            printf("> Credencial Incorrect\n");
             return -1;
         }
         else{
-            printf("> Error occured2 \n");
+            printf("> Error occured in PASS \n");
             return -1;
         }
     }
+    else if(strncmp(response, "530 Permission denied",21) == 0){
+        printf("> Permission denied\n");
+        return -1;
+    }
     else{
-        printf("> Error \n");
-        printf("> %s\n",response);
+        printf("> Error occured in USER \n");
         return -1;
     }
 

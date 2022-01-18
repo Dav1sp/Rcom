@@ -1,0 +1,5 @@
+ftp://[rcom:rcom@]netlab1.fe.up.pt/pipe.txt
+ftp://[rcom:rcom@]netlab1.fe.up.pt/files/crab.mp4
+ftp://[rcom:rcom@]netlab1.fe.up.pt/files/pic1.jpg
+ftp://[rcom:rcom@]netlab1.fe.up.pt/files/pic2.png
+ftp://[anonymous:anonymous@]netlab1.fe.up.pt/pub.txt
