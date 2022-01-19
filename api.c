@@ -134,52 +134,46 @@ void printPassive(char *response3){
 
 void read_answer(int socket, char *host_answer){
 
+    char res;
     bool stop = false;
-    char response;
-    int estado = 0;
     int i = 0;
+    int state = 0;
 
     while(!stop){
-        //ler do socket um char de cada vez
-        read(socket, &response, 1);
-        //imprime na consola a resposta do user
-		printf("%c", response);
         
-        switch(estado){
-            case 0:
-                if(i == 3){
-                    estado = 1;
-                }
-                else{
-                    host_answer[i] = response;
-                    i++;
-                }
-
-                break;
-            case 1:
-                if(response == '\n'){
-                    stop = true;
-                }
-                break;
+        read(socket, &res, 1);
+		printf("%c", res);
+        
+        if(state == 0){
+            if(i == 3){
+                estado = 1;
+            }
+            else{
+                host_answer[i] = res;
+                i++;
+            }
         }
-    }
+        else if(state == 1){
+            if(res == '\n') stop = true;
+        }
 }
 
-int parseResponse(char* response){
-    char mostSig[5];
+int parseResponse(char* res){
+
+    char bigSignificance[5];
 	memset(mostSig, 0, 5);
-	char lessSig[4];
+	char smallSignificance[4];
 	memset(lessSig, 0, 5);
 
-    int i = 0;
     int ms = 0;
     int ls = 0;
+    int i = 0;
     int state = 0;
     int number_comma = 0;
 
-    while(i < strlen(response)){
+    while(i < strlen(res)){
         if(state == 0){
-            if(response[i] == '('){
+            if(res[i] == '('){
                 state = 1;
                 i++;
             }
@@ -189,27 +183,27 @@ int parseResponse(char* response){
         }
         else if(state == 1){
             if(number_comma < 4){
-                if(response[i] == ','){
+                if(res[i] == ','){
                     number_comma++;
                 }
                 i++;
             }
             else if(number_comma == 4){
-                if(response[i] == ','){
+                if(res[i] == ','){
                     number_comma++;
                 }
                 else{
-                    mostSig[ms] = response[i];
+                    bigSignificance[ms] = res[i];
                     ms++;
                 }
                 i++;
             }
             else if(number_comma == 5){
-                if(response[i] == ')'){
+                if(res[i] == ')'){
                     state = 2;;
                 }
                 else{
-                    lessSig[ls] = response[i];
+                    smallSignificance[ls] = res[i];
                     ls++;
                 }
                 i++;
@@ -222,40 +216,38 @@ int parseResponse(char* response){
     }
 
    
-    int mostSignificant = atoi(mostSig);
-	int lessSignificant = atoi(lessSig);
-	return (mostSignificant * 256 + lessSignificant);
+    int theMostSignificant = atoi(bigSignificance);
+	int theLessSignificant = atoi(smallSignificance);
+	return (theMostSignificant * 256 + theLessSignificant);
 }
 
+void create_file(int sockfd_file_transfer, char* path){
+	FILE *file = fopen(path, "wb+");
 
-
-
-
-void create_file(int sockfd_file_transfer, char* path_file){
-	FILE *file = fopen(path_file, "wb+");
-
-    
-    char buffer[1000];
  	int bytes;
     int counter = 0;
+    char buf[1000];
 
-	printf("> Starting download!\n");
+	printf("> Começar Download\n");
 
-    while ((bytes = read(sockfd_file_transfer, buffer, 1000))>0) {
-            printf("...");
-            bytes = fwrite(buffer, bytes, 1, file);   
+    while ((bytes = read(sockfd_file_transfer, buf, 1000))>0) {
+            printf(".....");
+            bytes = fwrite(buf, bytes, 1, file);   
     }
    
     fclose(file);
     printf("\n");
-	printf("> Done!\n");
-
+	printf("> Terminado!\n");
 }
 
+//Reading code that server responsed
 void readConnection(int sockfd, char *connection){
+
+    //Initializing variables
     int error = 0;
+    int state = 0; 
 	char c;
-	int state = 0; 
+
 	while (state != 3){	
 		read(sockfd, &c, 1);
 		printf("%c", c);
@@ -263,7 +255,7 @@ void readConnection(int sockfd, char *connection){
 		case 0:
 			if (c == ' '){
 				if (error != 3){
-					printf(" > Error\n");
+					printf(" > Erro\n");
 					return;
 				}
 				error = 0;
