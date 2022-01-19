@@ -5,8 +5,13 @@
 int getProtocol(int i, char **argv,char *protocol){
     int indice=0;
     while(i < strlen(argv[1])){
-        if(argv[1][i]==':'&& argv[1][i+1]=='/'&&argv[1][i+2]=='/'&&argv[1][i+3]=='['){
-            return 0;
+        if(argv[1][i]==':'){
+            if(argv[1][i+1]=='/'&&argv[1][i+2]=='/'&&argv[1][i+3]=='['){
+                return 0;
+            }
+            else{
+                return 1;
+            }
         }
         else{
             protocol[indice]=argv[1][i];
@@ -130,40 +135,12 @@ void printPassive(char *response3){
             }
 }
 
-
-
-void read_answer(int socket, char *host_answer){
-
-    char res;
-    bool stop = false;
-    int i = 0;
-    int state = 0;
-
-    while(!stop){
-        
-        read(socket, &res, 1);
-		printf("%c", res);
-        
-        if(state == 0){
-            if(i == 3){
-                estado = 1;
-            }
-            else{
-                host_answer[i] = res;
-                i++;
-            }
-        }
-        else if(state == 1){
-            if(res == '\n') stop = true;
-        }
-}
-
 int parseResponse(char* res){
 
     char bigSignificance[5];
-	memset(mostSig, 0, 5);
+	memset(bigSignificance, 0, 5);
 	char smallSignificance[4];
-	memset(lessSig, 0, 5);
+	memset(smallSignificance, 0, 5);
 
     int ms = 0;
     int ls = 0;

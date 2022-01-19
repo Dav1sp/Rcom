@@ -5,10 +5,10 @@ int main(int argc, char** argv){
     //nº de argumentos
 
     if (argc < 2) {
-        perror("Por favor envie um URL\n");
+        printf("Por favor envie um URL\n");
         exit(-1);
     } else if (argc > 2) {
-        perror("Demasiados argumentos\n");
+        printf("Demasiados argumentos\n");
         exit(-1);
     }
 
@@ -37,13 +37,13 @@ int main(int argc, char** argv){
     //break up url
 
     if( getProtocol(0,argv,protocol)==1){
-        perror("invalid Protocol\n");
+        printf("Protocolo inválido\n");
         exit(-1);
     }
 
 
     if( getUser(strlen(protocol)+4,argv,name)==1){
-        perror("invalid User\n");
+        printf("User inválido\n");
         exit(-1);
     }
 
@@ -53,17 +53,17 @@ int main(int argc, char** argv){
             break;
         }
         case 1:{
-            perror("invalid Password\n");
+            printf("Password inválida\n");
             exit(-1);
         }
         case 2:{
-            perror("Path inválido, necessita de ser algo como ftp://[<user>:<password>@]<host>/<url-path>\n");
+            printf("Path inválido, necessita de ser algo como ftp://[<user>:<password>@]<host>/<url-path>\n");
             exit(-1);
         }
     }
 
     if( getHost(strlen(protocol)+4+strlen(name)+1+strlen(password)+2,argv,host)==1){
-        perror("Host inválido\n");
+        printf("Host inválido\n");
         exit(-1);
     }
     
