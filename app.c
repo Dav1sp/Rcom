@@ -57,13 +57,13 @@ int main(int argc, char** argv){
             exit(-1);
         }
         case 2:{
-            perror("invalid Path, need to be something like this ftp://[<user>:<password>@]<host>/<url-path>\n");
+            perror("Path inválido, necessita de ser algo como ftp://[<user>:<password>@]<host>/<url-path>\n");
             exit(-1);
         }
     }
 
     if( getHost(strlen(protocol)+4+strlen(name)+1+strlen(password)+2,argv,host)==1){
-        perror("invalid Host\n");
+        perror("Host inválido\n");
         exit(-1);
     }
     
@@ -71,13 +71,12 @@ int main(int argc, char** argv){
 
     getFileName(path_file,file_name);
 
-    printf("Protocol: %s\n", protocol);
-    printf("Name: %s\n", name);
+    printf("Protocolo: %s\n", protocol);
+    printf("Nome: %s\n", name);
     printf("Password: %s\n", password);
     printf("Host: %s\n", host);
-    printf("PathFile: %s\n", path_file);
-    printf("FileName: %s\n", file_name);
-
+    printf("Path do ficheiro: %s\n", path_file);
+    printf("Nome do ficheiro: %s\n", file_name);
 
     //get Ip address
 
@@ -89,10 +88,10 @@ int main(int argc, char** argv){
     }
 
     char* ip = inet_ntoa(*((struct in_addr *) h->h_addr));
-    printf("IP Address : %s\n", ip);
+    printf("Endereço de IP: %s\n", ip);
 
 
-    //client
+    //cliente
 
     int	sockfd; //socket de ligação
     int sockfd_file_transfer; //socker de transferencia de ficheiro
@@ -108,7 +107,7 @@ int main(int argc, char** argv){
         perror("socket()");
         exit(-1);
     }
-    /*connect to the server*/
+    /*conectar ao servidor*/
     if (connect(sockfd,(struct sockaddr *) &server_addr,sizeof(server_addr)) < 0) {
         perror("connect()");
         exit(-1);
@@ -117,16 +116,16 @@ int main(int argc, char** argv){
     char connection[3];
     readConnection(sockfd, connection);
     if (connection[0] == '2'){										 
-        printf("> Connection Estabilished\n"); 
+        printf("> Conexao estabelecida\n"); 
     }
 
     char response[SIZE];
     dprintf(sockfd, "user %s\r\n", name);
     read(sockfd, response, SIZE);
-    printf("> Sending user \n");
+    printf("> Enviar utilizador \n");
     printf("%s\n",name);
     if(strncmp(response, "331 Please specify the password",31) == 0){//user certo,  mandar pass
-        printf("> Sending password \n");
+        printf("> A enviar password \n");
         printf("%s\n",password);
         char response2[SIZE];
         dprintf(sockfd, "pass %s\r\n", password);
@@ -160,34 +159,34 @@ int main(int argc, char** argv){
 	        dprintf(sockfd, "retr %s\r\n", path_file);//printf para um filedescriptor(antigo)
             read(sockfd, response3, SIZE);
             if(strncmp(response3, "550", 3)==0){
-                printf("> Failed to open file\n");
+                printf("> Falha ao abrir o ficheiro\n");
                 return -1;
             }
             else if(strncmp(response3, "150", 3)==0){
-                printf("> Sending retrieve\n");
+                printf("> A enviar retrieve\n");
                 create_file(sockfd_file_transfer, file_name);
             }
             else{
-                printf("> Error occured open the file \n");
+                printf("> Ocorreu um erro ao abrir o ficheiro\n");
                 return -1;
             }
             
         }
         else if(strncmp(response2, "530 Login incorrect",19) == 0){
-            printf("> Credencial Incorrect\n");
+            printf("> Credenciais incorretas\n");
             return -1;
         }
         else{
-            printf("> Error occured in PASS \n");
+            printf("> Occorreu um erro em PASS \n");
             return -1;
         }
     }
     else if(strncmp(response, "530 Permission denied",21) == 0){
-        printf("> Permission denied\n");
+        printf("> Permissao negada\n");
         return -1;
     }
     else{
-        printf("> Error occured in USER \n");
+        printf("> Ocorreu um erro em USER \n");
         return -1;
     }
 
